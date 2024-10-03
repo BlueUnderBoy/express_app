@@ -1,5 +1,7 @@
 const express = require("express");
 const jparser = require('body-parser');
+const fighters = require("./routes/fighters");
+const wins = require("./routes/wins");
 const app = express();
 const port = 3000;
 
@@ -12,6 +14,9 @@ app.use(jparser.json({ extended: true }));
 
 app.use(express.static(path.join(__dirname, 'templates')))
 
+app.use("/api/fighters", fighters);
+app.use("/api/wins", wins);
+
 app.get("/", (req, res) => {
     res.json({
         links: [
@@ -23,6 +28,34 @@ app.get("/", (req, res) => {
     ],
 });
 });
+
+app.get("/api", (req, res) => {
+    res.json({
+      links: [
+        {
+          href: "api/fighters",
+          rel: "fighters",
+          type: "GET",
+        },
+        {
+          href: "api/fighters",
+          rel: "fighters",
+          type: "POST",
+        },
+        {
+          href: "api/wins",
+          rel: "wins",
+          type: "GET",
+        },
+        {
+          href: "api/wins",
+          rel: "wins",
+          type: "POST",
+        },
+      ],
+    });
+  });
+  
 
 app.use((req, res, next) => {
     next(error(404, "Resource Not Found"));
